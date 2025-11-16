@@ -1,0 +1,4 @@
+pygame
+cx_Freeze
+
+#para usar digite pip install -r requirements.txt

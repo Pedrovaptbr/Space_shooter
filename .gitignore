@@ -1,0 +1,23 @@
+# Pasta de ambiente virtual
+venv/
+env/
+.venv/
+.env
+
+# Arquivos de cache e compilados do Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Pastas de build e distribuição (geradas pelo cx_Freeze)
+build/
+dist/
+*.egg-info/
+
+# Arquivos específicos do PyCharm
+.idea/
+
+# Arquivos específicos do sistema operacional
+.DS_Store
+Thumbs.db
