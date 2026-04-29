@@ -15,11 +15,69 @@ Se você encontrar algum buraco de minhoca (bug) ou tiver ideias para novas gal�
 *   **Arte:** Todos os pixels e sprites que você vê por aqui foram desenhados por mim! 🎨✨
 *   **Sons:** Os efeitos sonoros e a música são daquele tipo legal que todo mundo pode usar (royalty-free). Então, pode aumentar o volume sem medo! 🎶
 
+## 🛠️ Como Rodar
+
+Pré-requisito: **Python 3.10+** instalado.
+
+```bash
+# 1. Clone o projeto
+git clone <url-do-repo>
+cd Space_shooter
+
+# 2. (opcional, mas recomendado) crie um ambiente virtual
+python -m venv .venv
+# Windows:
+.venv\Scripts\activate
+# Linux/Mac:
+source .venv/bin/activate
+
+# 3. Instale as dependências
+pip install -r requirements.txt
+
+# 4. Manda bala!
+python main.py
+```
+
+Quer testar o modo online sozinho rodando servidor + 2 clientes na mesma máquina? Use:
+
+```bash
+python test.py
+```
+
+## 🎮 Controles
+
+### Modo 2 Jogadores (Local)
+
+| Ação              | Jogador 1 (Azul) | Jogador 2 (Vermelho) |
+|-------------------|------------------|----------------------|
+| Mover             | `W` `A` `S` `D`  | Setas direcionais    |
+| Atirar            | `Espaço`         | `Enter`              |
+| Recarregar munição| `R`              | `Right Shift`        |
+| Ativar escudo     | `C`              | `Right Ctrl`         |
+
+### Modo Online
+
+Mover com `WASD` e atirar com `Espaço`. Para criar um servidor, vá em **Jogar Online** → **Criar Servidor**, e o IP de rede aparece na tela pra compartilhar com o outro jogador.
+
+### Em qualquer tela
+
+`Esc` volta ao menu / sai do jogo.
+
+## 📦 Download (Em Breve!)
+
 ## 📦 Download (Em Breve!)
 
 Para quem não quer mexer com código e só quer sair atirando, relaxa! 😌
 
 Estou planejando adicionar um arquivo `.exe` para download em breve. Assim, você poderá baixar e jogar com apenas alguns cliques. Fique de olho nas "Releases" aqui do GitHub!
+
+Quem já quiser gerar o executável agora, é só rodar:
+
+```bash
+python setup.py build
+```
+
+(O `cx_Freeze` cuida do resto e gera a pasta `build/`.)
 
 ## 📬 Contato
 
