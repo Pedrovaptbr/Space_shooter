@@ -9,6 +9,7 @@ from starter.config import FPS
 from starter.sound_manager import SoundManager
 from starter.cursor import AnimatedCursor
 from starter.powerup import PowerUp
+from starter.scoring import decidir_vencedor_round
 
 
 # --- CONSTANTES DO JOGO LOCAL ---
@@ -294,9 +295,10 @@ def local_game_main():
     tempo_fim_round = 0
     mensagem_round = ""
     mensagem_fim_jogo = ""
+    round_pontuado = False  # impede que vitorias_p1/p2 sejam incrementadas duas vezes no mesmo round
 
     def resetar_round():
-        nonlocal fim_de_round, mensagem_round
+        nonlocal fim_de_round, mensagem_round, round_pontuado
         jogador1.vida = 3; jogador2.vida = 3
         jogador1.bullets.clear(); jogador2.bullets.clear()
         jogador1.rect.topleft = (100, ALTURA_TELA / 2)
@@ -307,6 +309,7 @@ def local_game_main():
         estado['poder_p2'] = PODER_MAXIMO
         fim_de_round = False
         mensagem_round = ""
+        round_pontuado = False
 
     resetar_round()
 
@@ -357,14 +360,20 @@ def local_game_main():
                 jogador2.mover(teclas, pygame.K_UP, pygame.K_DOWN, pygame.K_LEFT, pygame.K_RIGHT, LARGURA_TELA, ALTURA_TELA)
                 processar_colisoes_locais(jogador1, jogador2, tela.get_rect(), sounds)
 
-                if jogador1.vida <= 0:
-                    vitorias_p2 += 1; fim_de_round = True
-                    tempo_fim_round = pygame.time.get_ticks()
-                    mensagem_round = f"{nome_p2} Venceu o Round!"
-                elif jogador2.vida <= 0:
-                    vitorias_p1 += 1; fim_de_round = True
-                    tempo_fim_round = pygame.time.get_ticks()
-                    mensagem_round = f"{nome_p1} Venceu o Round!"
+                if not round_pontuado:
+                    vencedor = decidir_vencedor_round(jogador1.vida, jogador2.vida)
+                    if vencedor is not None:
+                        if vencedor == 0:
+                            vitorias_p1 += 1
+                            mensagem_round = f"{nome_p1} Venceu o Round!"
+                        elif vencedor == 1:
+                            vitorias_p2 += 1
+                            mensagem_round = f"{nome_p2} Venceu o Round!"
+                        else:  # empate — ninguém pontua, mas o round acaba
+                            mensagem_round = "Empate!"
+                        fim_de_round = True
+                        round_pontuado = True
+                        tempo_fim_round = pygame.time.get_ticks()
 
             if fim_de_round and pygame.time.get_ticks() - tempo_fim_round > DURACAO_FIM_DE_ROUND_MS:
                 if vitorias_p1 >= ROUNDS_PARA_VENCER:
@@ -401,21 +410,4 @@ def local_game_main():
                 tela, fonte_media, LARGURA_TELA, ALTURA_TELA
             )
         elif fim_de_round and not fim_de_partida:
-            desenhar_overlay_fim_round(tela, fonte_grande, mensagem_round, LARGURA_TELA, ALTURA_TELA)
-        elif fim_de_partida:
-            botao_novo_round_rect, botao_voltar_menu_rect = desenhar_overlay_fim_partida(
-                tela, fonte_grande, fonte_media, mensagem_fim_jogo, LARGURA_TELA, ALTURA_TELA
-            )
-
-        cursor.draw(tela); pygame.display.flip()
-
-    sounds.stop_music()
-
-
-if __name__ == "__main__":
-    pygame.init()
-    info = pygame.display.Info()
-    tela = pygame.display.set_mode((info.current_w, info.current_h), pygame.FULLSCREEN)
-    local_game_main()
-    pygame.quit()
-    sys.exit()
+            desenhar_overlay_fim_round(tela, fonte_grande, mensagem_round, LARGURA_TELA, ALTURA_T
